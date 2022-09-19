@@ -89,7 +89,7 @@ function cargarErrores(mensajeArray, datosRegistro) {
   mensajeArray.push(mensajeApellido(datosRegistro.lastName))
   mensajeArray.push(mensajeEmail(datosRegistro.email))
   mensajeArray.push(mensajeContraseñaIgual(datosRegistro.password, datosRegistro.passwordConfirm))
-  mensajeArray.push(mensajeContraseñaValida(datosRegistro.firstName))
+  mensajeArray.push(mensajeContraseñaValida(datosRegistro.password))
 }
 
 function mensajeNombre(firstName){
@@ -122,4 +122,49 @@ function mostrarErrores(mensajeArray, datosRegistro) {
       }
     });
   }
+}
+
+function comprobarErrores(mensajeArray, datosRegistro){
+  if (permitirRegistro(mensajeArray)) {
+    realizarRegister(datosRegistro)
+  }
+  else {
+    mostrarErrores(mensajeArray, datosRegistro)
+  }
+}
+
+
+/*
+function mostrarErrores(mensajeArray, datosRegistro) {
+  // muestra los erroes almacenados en el array
+  const containerError = document.querySelector(".containerError");
+  containerError.innerHTML = ``;
+  mensajeArray.forEach((element) => {
+    if (element !== undefined) {
+      containerError.innerHTML += `<li class="rafa2">${element}</li>`;
+    }
+  });
+}
+*/
+
+function realizarRegister(datosRegistro) {
+  const URL = "https://ctd-todo-api.herokuapp.com/v1/users";
+  const config = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(datosRegistro),
+  };
+
+  fetch(URL, config)
+    .then(function (res) {
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(function (e) {
+      alert("Error! intente mas tarde");
+    });
 }

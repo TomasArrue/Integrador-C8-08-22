@@ -26,34 +26,12 @@ window.addEventListener("load", function () {
     };
 
     cargarErrores(mensajeArray, datosRegistro)
-    /*
-    const mensajeNombre = validarNombre(datosRegistro.firstName)
-    const mensajeApellido = validarApellido(datosRegistro.lastName)
-    const mensajeEmail = validarEmail(datosRegistro.email);
-    const contraseniaIguales = compararContrasenias(
-      datosRegistro.password,
-      datosRegistro.passwordConfirm
-    );
-    const logitudContrasenia = validarContrasenia(datosRegistro.password);
-    mensajeArray.push(mensajeNombre, mensajeApellido, mensajeEmail, contraseniaIguales, logitudContrasenia);
-    */
     
     mostrarErrores(mensajeArray, datosRegistro)
-    /*
-    if (permitirRegistro(mensajeArray)) {
-      realizarRegister(datosRegistro);
-    } else {
-      const containerError = document.querySelector(".containerError");
-      containerError.innerHTML = ``;
-      mensajeArray.forEach((element) => {
-        if (element !== undefined) {
-          containerError.innerHTML += `<li class="rafa2">${element}</li>`;
-        }
-      });
-    }
-    */
-  
+
     mensajeArray = [];
+
+    comprobarErrores(mensajeArray, datosRegistro)
   });
 
   /* -------------------------------------------------------------------------- */
