@@ -1,7 +1,20 @@
 const LONGITUD_CONTRASENIA = 8;
 
 /* ---------------------------------- texto --------------------------------- */
-function validarTexto(texto) {}
+function validarTexto(texto) {
+  return normalizarTexto(texto) == ""
+}
+
+function validarNombre(texto) {
+  if (validarTexto(texto)) {
+    return "El nombre no puede estar incompleto"
+  }
+}
+function validarApellido(texto) {
+  if (validarTexto(texto)) {
+    return "El apellido no puede estar incompleto"
+  }
+}
 
 function normalizarTexto(texto) {
   return texto.trim().toLowerCase();
@@ -65,4 +78,48 @@ function permitirRegistro(array) {
     }
   });
   return cant === 0 ? true : false;
+}
+
+
+/* ---------------------- validacion lado cliente -------------------------- */
+
+function cargarErrores(mensajeArray, datosRegistro) {
+  // carga los mensajes de error en el arreglo
+  mensajeArray.push(mensajeNombre(datosRegistro.firstName))
+  mensajeArray.push(mensajeApellido(datosRegistro.lastName))
+  mensajeArray.push(mensajeEmail(datosRegistro.email))
+  mensajeArray.push(mensajeContraseñaIgual(datosRegistro.password, datosRegistro.passwordConfirm))
+  mensajeArray.push(mensajeContraseñaValida(datosRegistro.firstName))
+}
+
+function mensajeNombre(firstName){
+  return validarNombre(firstName)
+}
+function mensajeApellido(lastName){
+  return validarApellido(lastName)
+}
+function mensajeEmail(email){
+  return validarEmail(email)
+}
+function mensajeContraseñaIgual(password, passwordConfirm){
+  return compararContrasenias(password, passwordConfirm)
+}
+function mensajeContraseñaValida(password){
+  return validarContrasenia(password)
+}
+
+function mostrarErrores(mensajeArray, datosRegistro) {
+  //si no hay errores realiza el registro;
+  //caso contrario los muestra
+  if (permitirRegistro(mensajeArray)) {
+    realizarRegister(datosRegistro);
+  } else {
+    const containerError = document.querySelector(".containerError");
+    containerError.innerHTML = ``;
+    mensajeArray.forEach((element) => {
+      if (element !== undefined) {
+        containerError.innerHTML += `<li class="rafa2">${element}</li>`;
+      }
+    });
+  }
 }

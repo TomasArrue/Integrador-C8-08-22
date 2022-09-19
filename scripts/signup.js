@@ -25,14 +25,21 @@ window.addEventListener("load", function () {
       passwordConfirm: inputPasswordRepetida.value,
     };
 
-    const mensajeFallido = validarEmail(datosRegistro.email);
+    cargarErrores(mensajeArray, datosRegistro)
+    /*
+    const mensajeNombre = validarNombre(datosRegistro.firstName)
+    const mensajeApellido = validarApellido(datosRegistro.lastName)
+    const mensajeEmail = validarEmail(datosRegistro.email);
     const contraseniaIguales = compararContrasenias(
       datosRegistro.password,
       datosRegistro.passwordConfirm
     );
     const logitudContrasenia = validarContrasenia(datosRegistro.password);
-    mensajeArray.push(mensajeFallido, contraseniaIguales, logitudContrasenia);
-
+    mensajeArray.push(mensajeNombre, mensajeApellido, mensajeEmail, contraseniaIguales, logitudContrasenia);
+    */
+    
+    mostrarErrores(mensajeArray, datosRegistro)
+    /*
     if (permitirRegistro(mensajeArray)) {
       realizarRegister(datosRegistro);
     } else {
@@ -44,14 +51,14 @@ window.addEventListener("load", function () {
         }
       });
     }
-
+    */
+  
     mensajeArray = [];
   });
 
   /* -------------------------------------------------------------------------- */
   /*                    FUNCIÓN 2: Realizar el signup [POST]                    */
   /* -------------------------------------------------------------------------- */
-
   function realizarRegister(datosRegistro) {
     const URL = "https://ctd-todo-api.herokuapp.com/v1/users";
     const config = {

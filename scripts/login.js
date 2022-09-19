@@ -7,9 +7,9 @@ if(jwt){
 
 window.addEventListener('load', function () {
     /* ---------------------- obtenemos variables globales ---------------------- */
-   const form = document.querySelector('form');
-   const inputEmail = document.getElementById('inputEmail');
-   const inputPassword = document.getElementById('inputPassword');
+    const form = document.querySelector('form');
+    const inputEmail = document.getElementById('inputEmail');
+    const inputPassword = document.getElementById('inputPassword');
 
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
@@ -43,18 +43,18 @@ window.addEventListener('load', function () {
     /*                     FUNCIÓN 2: Realizar el login [POST]                    */
     /* -------------------------------------------------------------------------- */
     function realizarLogin(settings) {
-       const URL = 'https://ctd-todo-api.herokuapp.com/v1/users/login'
+        const URL = 'https://ctd-todo-api.herokuapp.com/v1/users/login'
 
-       fetch(URL, settings).then( res => {
+        fetch(URL, settings).then( res => {
         return res.json();
-       }).then (data => {
+        }).then (data => {
         const { jwt } = data;
         if(jwt) {
             guardarToken(jwt);
             location.replace('/mis-tareas.html');;
         }
         alert(data);
-       }) 
+        }) 
     };
 
 
