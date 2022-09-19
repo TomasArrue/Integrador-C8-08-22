@@ -7,9 +7,9 @@ if(jwt){
 
 window.addEventListener('load', function () {
     /* ---------------------- obtenemos variables globales ---------------------- */
-    const form = document.querySelector('form');
-    const inputEmail = document.getElementById('inputEmail');
-    const inputPassword = document.getElementById('inputPassword');
+   const form = document.querySelector('form');
+   const inputEmail = document.getElementById('inputEmail');
+   const inputPassword = document.getElementById('inputPassword');
 
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */

@@ -1,3 +1,9 @@
+const jwt = cargarToken();
+
+if(jwt){
+    location.replace('/mis-tareas.html');
+}
+
 window.addEventListener("load", function () {
   /* ---------------------- obtenemos variables globales ---------------------- */
   const form = document.querySelector("form");
@@ -8,7 +14,7 @@ window.addEventListener("load", function () {
   const inputPasswordRepetida = document.getElementById(
     "inputPasswordRepetida"
   );
-
+  const containerError = document.querySelector(".containerError");
   let mensajeArray = [];
 
   /* -------------------------------------------------------------------------- */
@@ -16,6 +22,7 @@ window.addEventListener("load", function () {
   /* -------------------------------------------------------------------------- */
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    containerError.innerHTML = ``;
 
     const datosRegistro = {
       firstName: normalizarTexto(inputNombre.value),
@@ -25,18 +32,28 @@ window.addEventListener("load", function () {
       passwordConfirm: inputPasswordRepetida.value,
     };
 
-    cargarErrores(mensajeArray, datosRegistro)
-    
-    mostrarErrores(mensajeArray, datosRegistro)
+    mensajeArray.push(
+      validarEmail(datosRegistro),
+      compararContrasenias(datosRegistro),
+      validarContrasenia(datosRegistro)
+    );
 
+    if (permitirRegistro(mensajeArray)) {
+      realizarRegister(datosRegistro);
+    } else {
+      mensajeArray.forEach((element) => {
+        if (element !== undefined) {
+          containerError.innerHTML += `<li class="rafa2">${element}</li>`;
+        }
+      });
+    }
     mensajeArray = [];
-
-    comprobarErrores(mensajeArray, datosRegistro)
   });
 
   /* -------------------------------------------------------------------------- */
   /*                    FUNCIÓN 2: Realizar el signup [POST]                    */
   /* -------------------------------------------------------------------------- */
+
   function realizarRegister(datosRegistro) {
     const URL = "https://ctd-todo-api.herokuapp.com/v1/users";
     const config = {
@@ -52,7 +69,13 @@ window.addEventListener("load", function () {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        const { jwt } = data;
+        guardarToken(jwt)
+        if (jwt) {
+          location.replace("/mis-tareas.html");
+        } else {
+          containerError.innerHTML += `<li class="rafa2">${data}</li>`;
+        }
       })
       .catch(function (e) {
         alert("Error! intente mas tarde");
