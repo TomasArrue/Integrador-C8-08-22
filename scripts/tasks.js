@@ -74,7 +74,6 @@ window.addEventListener('load', function () {
     .then( data => {
       console.log(data);
       renderizarTareas(data);
-      botonesCambioEstado(data);
     })
   };
 
@@ -112,6 +111,14 @@ window.addEventListener('load', function () {
   /* -------------------------------------------------------------------------- */
   /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                 */
   /* -------------------------------------------------------------------------- */
+
+  function renderizarCantidadCompletadas() {
+    const listaTerminadas = document.querySelector('.tareas-terminadas');
+    const cantFinalizadas = document.getElementById('cantidad-finalizadas');
+    console.log(cantFinalizadas);
+    cantFinalizadas.textContent = listaTerminadas.childElementCount;
+  }
+
   function renderizarTarea(tarea) {
     const li = document.createElement('li');
     li.classList.add('tarea');
@@ -139,6 +146,8 @@ window.addEventListener('load', function () {
       </div>
       `
       contenedorFinalizadas.appendChild(li);
+      const botonEliminar = li.querySelector('.borrar');
+      botonBorrarTarea(botonEliminar, tarea)
     } else {
       //tarea pendiente
       const fecha = new Date(tarea.createdAt);
@@ -156,6 +165,9 @@ window.addEventListener('load', function () {
 
       contenedorPendientes.appendChild(li)
     }
+    const boton = li.querySelector('.change');
+    botonCambioEstado(boton, tarea);
+    renderizarCantidadCompletadas();
   }
 
   function renderizarTareas(listado) {
@@ -187,19 +199,16 @@ window.addEventListener('load', function () {
     }
     fetch(URL,config).then( res => {return res.json()}).then(data => {
       const { id } = data;
-      const nodo = document.getElementById(id).parentElement;
+      const nodo = document.getElementById(id).closest('li');
       nodo.remove();
       renderizarTarea(data)
     })
    
   }
 
-  function botonesCambioEstado(listado) {
+  function botonCambioEstado(boton, tarea) {
     
-    const botones = document.querySelectorAll('.change');
-    botones.forEach( boton => {
-      boton.addEventListener('click', e => cambiarEstado(e.target, listado.find( tarea => tarea.id == e.target.id)))
-    })
+    boton.addEventListener('click', () => cambiarEstado(boton, tarea))
 
   }
 
@@ -207,11 +216,38 @@ window.addEventListener('load', function () {
   /* -------------------------------------------------------------------------- */
   /*                     FUNCIÓN 7 - Eliminar tarea [DELETE]                    */
   /* -------------------------------------------------------------------------- */
-  function botonBorrarTarea() {
-   
+  function eliminarTarea(boton, tarea) {
+    /* 
+    Peticion delete, donde eliminamos la tarea de la API
+    Eliminamos el nodo
+    */
+    const nodo = boton.closest('li');
     
+    const { id } = tarea;
 
-    
+    const URL =  `https://ctd-todo-api.herokuapp.com/v1/tasks/${id}`
+    const config = {
+      method: 'DELETE',
+      headers: {
+        authorization: jwt,
+        'Content-Type': "application/json; charset=UTF-8",
+      }
+    }
+
+    fetch(URL, config).then( res => {
+      if(res.status === 200) {
+        nodo.remove();
+        renderizarCantidadCompletadas();
+      }
+      return res.json()})
+    .then( data => {
+      console.log(data);
+    })
+  }
+
+  function botonBorrarTarea(boton, tarea) {
+   
+    boton.addEventListener('click', () => eliminarTarea(boton, tarea))
 
   };
 
